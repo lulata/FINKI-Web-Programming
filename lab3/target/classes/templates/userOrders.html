@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Balloon Order page - Welcome and choose a Balloon</title>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+<main>
+
+
+    <div class="container ">
+        <h1>Orders</h1>
+
+        <div th:if="${hasError}">
+            <h5 class="text-center text-danger" th:text="${error}"></h5>
+        </div>
+        <div class="col mb-3">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <a href="/balloons" class="btn btn-block btn-dark">Create new order</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12" th:if="${orders.size() > 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Balloon Color</th>
+                            <th scope="col">Order Size</th>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Client Address</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.getBalloonColor()}"></td>
+                            <td th:text="${order.getBalloonSize()}"></td>
+                            <td th:text="${session.clientName}"><</td>
+                            <td th:text="${session.clientAddress}"></td>
+                            <td th:if = "${order.getDateTime() != null}" th:text="${#temporals.format(order.getDateTime(), 'dd-MM-yyyy HH:mm')}"></td>
+
+                            <td>
+                            <td>
+                                <form th:action="@{'/orders/delete/{id}' (id=${order.getOrderId()})}" th:method="DELETE">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                            <td><a th:href="@{/orders/edit-form/{id}(id=${order.getOrderId()})}">Edit</a></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</main>
+</body>
+</html>
